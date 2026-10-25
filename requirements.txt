@@ -3,3 +3,6 @@ requests
 jupyter
 ipykernel
 matplotlib
+scikit-learn
+seaborn
+scipy
