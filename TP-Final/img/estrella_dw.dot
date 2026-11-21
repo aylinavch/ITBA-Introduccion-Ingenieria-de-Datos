@@ -1,0 +1,60 @@
+digraph DW {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, nodesep=0.45, ranksep=1.0, fontname="Helvetica"];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=9, color="#555555", arrowsize=0.8, dir=both, arrowtail=teetee, arrowhead=crow];
+
+  dim_sesion [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>DIM_SESION</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>sesion_key</b> (PK)</td></tr>
+    <tr><td align="left">sesion_id · pid · sexo</td></tr>
+    <tr><td align="left">edad · grupo_etario</td></tr>
+    <tr><td align="left">imc · categoria_imc</td></tr>
+    <tr><td align="left">valida_psg · valida_hb</td></tr>
+    <tr><td align="left">tiene_psg_belts … tiene_hb_pulse</td></tr></table>>];
+
+  dim_evaluador [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>DIM_EVALUADOR</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>evaluador_key</b> (PK)</td></tr>
+    <tr><td align="left">evaluador_id · descripcion</td></tr>
+    <tr><td align="left">dispositivo · fabricante · modelo</td></tr></table>>];
+
+  dim_estadio [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>DIM_ESTADIO</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>estadio_key</b> (PK)</td></tr>
+    <tr><td align="left">estadio_id · sigla · nombre</td></tr>
+    <tr><td align="left">es_sueno · es_valido</td></tr></table>>];
+
+  dim_tercio [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>DIM_TERCIO</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>tercio_key</b> (PK)</td></tr>
+    <tr><td align="left">nombre</td></tr></table>>];
+
+  fact_conc [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#C0504D"><font color="white"><b>FACT_CONCORDANCIA</b></font></td></tr>
+    <tr><td align="left" port="ses"><b>sesion_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="eva"><b>evaluador_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="ref"><b>estadio_ref_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="pred"><b>estadio_pred_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="ter"><b>tercio_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">n_epocas</td></tr></table>>];
+
+  fact_noche [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="4">
+    <tr><td bgcolor="#C0504D"><font color="white"><b>FACT_NOCHE</b></font></td></tr>
+    <tr><td align="left" port="ses"><b>sesion_key</b> (PK, FK)</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">horas_registro · tst_min · eficiencia</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">latencia_sueno_min · latencia_rem_min</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">waso_min · pct_n1 … pct_rem</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">pct_artefacto_hb</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">acuerdo_psg · kappa_psg</td></tr>
+    <tr><td align="left" bgcolor="#F2DCDB">acuerdo_hb · kappa_hb</td></tr></table>>];
+
+  dim_evaluador:pk -> fact_conc:eva;
+  dim_tercio:pk -> fact_conc:ter;
+  dim_estadio:pk -> fact_conc:ref [label="rol: referencia"];
+  dim_estadio:pk -> fact_conc:pred [label="rol: predicho"];
+  fact_conc:ses -> dim_sesion:pk [dir=both, arrowtail=crow, arrowhead=teetee];
+  fact_noche:ses -> dim_sesion:pk [dir=both, arrowtail=teetee, arrowhead=teetee, label="1 : 1"];
+
+  {rank=same; dim_evaluador; dim_estadio; dim_tercio}
+  {rank=same; fact_noche}
+}
