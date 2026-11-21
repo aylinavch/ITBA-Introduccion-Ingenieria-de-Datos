@@ -1,0 +1,64 @@
+digraph ER {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, nodesep=0.5, ranksep=0.9, fontname="Helvetica"];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10, color="#555555", arrowsize=0.8];
+
+  persona [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>PERSONA</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>pid</b> (PK)</td></tr>
+    <tr><td align="left">sexo</td></tr></table>>];
+
+  sesion [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>SESION</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>sesion_id</b> (PK)</td></tr>
+    <tr><td align="left" port="pid">pid (FK)</td></tr>
+    <tr><td align="left">edad · NULL</td></tr>
+    <tr><td align="left">imc · NULL</td></tr>
+    <tr><td align="left">valida_psg</td></tr>
+    <tr><td align="left">valida_hb</td></tr></table>>];
+
+  epoca [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>EPOCA</b></font></td></tr>
+    <tr><td align="left" port="sid"><b>sesion_id</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="pk"><b>nro_epoca</b> (PK)</td></tr>
+    <tr><td align="left">onset_s</td></tr></table>>];
+
+  etiqueta [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#C0504D"><font color="white"><b>ETIQUETA</b></font></td></tr>
+    <tr><td align="left"><b>sesion_id</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="ep"><b>nro_epoca</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="ev"><b>evaluador_id</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="es">estadio_id (FK) · NULL</td></tr></table>>];
+
+  evaluador [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>EVALUADOR</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>evaluador_id</b> (PK)</td></tr>
+    <tr><td align="left">descripcion</td></tr>
+    <tr><td align="left">tipo</td></tr>
+    <tr><td align="left" port="disp">dispositivo_id (FK)</td></tr></table>>];
+
+  dispositivo [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>DISPOSITIVO</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>dispositivo_id</b> (PK)</td></tr>
+    <tr><td align="left">acq</td></tr>
+    <tr><td align="left">fabricante</td></tr>
+    <tr><td align="left">modelo</td></tr>
+    <tr><td align="left">fs_hz</td></tr></table>>];
+
+  estadio [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>ESTADIO</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>estadio_id</b> (PK)</td></tr>
+    <tr><td align="left">sigla</td></tr>
+    <tr><td align="left">nombre</td></tr>
+    <tr><td align="left">es_sueno</td></tr></table>>];
+
+  persona:pk -> sesion:pid    [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  sesion:pk -> epoca:sid     [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  epoca:pk -> etiqueta:ep  [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  evaluador:pk -> etiqueta:ev [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  estadio:pk -> etiqueta:es  [label="1 : N", dir=both, arrowtail=teeodot, arrowhead=crow];
+  dispositivo:pk -> evaluador:disp [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+
+  {rank=same; persona; dispositivo}
+  {rank=same; sesion; evaluador}
+}
