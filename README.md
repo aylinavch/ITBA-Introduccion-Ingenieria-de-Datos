@@ -28,6 +28,13 @@ Este repositorio contiene los trabajos prácticos y apuntes de la materia **Intr
     - **Almacén de datos en esquema estrella (constelación):** cubo de concordancia y hechos por noche, cargados con SQL desde la base transaccional.
     - **Tablero interactivo en Dash** con el mensaje: *la vincha wearable estadifica el sueño casi tan bien como el PSG clínico, pero pierde precisión en el sueño profundo (N3)*.
   - `TP-Final/requirements.txt`: dependencias necesarias para ejecutar la notebook (local o en Google Colab).
+  - `TP-Final/src/`: código auxiliar que usa la notebook (cada archivo tiene un encabezado que explica su contenido):
+    - `oltp_esquema.sql` y `dw_esquema.sql`: esquemas (DDL) de la base transaccional y del almacén.
+    - `dw_etl.sql`: carga del almacén desde la base transaccional, en una única transacción.
+    - `dw_cubo.sql`: consulta del cubo de concordancia, usada por las consultas OLAP y el tablero.
+    - `metricas.py`: indicadores por noche y cálculo del acuerdo y κ de Cohen a partir de conteos.
+    - `tablero.py`: gráficos, filtros y diseño del tablero en Dash.
+  - `TP-Final/TP_Final.pdf`: versión en PDF de la notebook ejecutada.
   - `TP-Final/img/`: diagrama entidad-relación de la base transaccional, diagrama del esquema estrella (con sus fuentes `.dot` de Graphviz) y vista estática del tablero.
 - `Clase06-Practica.ipynb`: Práctica de la Clase 6 (Bases de Datos) - normalización de un dataset (1FN, 2FN, 3FN) y carga del resultado en una base de datos SQLite.
 - `clase-06.md` / `clase-07.md`: Apuntes de las clases 6 y 7.
