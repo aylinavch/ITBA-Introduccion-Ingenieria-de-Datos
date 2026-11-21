@@ -52,6 +52,19 @@ digraph ER {
     <tr><td align="left">nombre</td></tr>
     <tr><td align="left">es_sueno</td></tr></table>>];
 
+
+  sensor [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#2F5D8A"><font color="white"><b>SENSOR</b></font></td></tr>
+    <tr><td align="left" port="pk"><b>sensor_id</b> (PK)</td></tr>
+    <tr><td align="left">codigo</td></tr>
+    <tr><td align="left" port="disp">dispositivo_id (FK)</td></tr>
+    <tr><td align="left">descripcion</td></tr></table>>];
+
+  sesion_sensor [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="5">
+    <tr><td bgcolor="#C0504D"><font color="white"><b>SESION_SENSOR</b></font></td></tr>
+    <tr><td align="left" port="sid"><b>sesion_id</b> (PK, FK)</td></tr>
+    <tr><td align="left" port="sen"><b>sensor_id</b> (PK, FK)</td></tr></table>>];
+
   persona:pk -> sesion:pid    [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
   sesion:pk -> epoca:sid     [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
   epoca:pk -> etiqueta:ep  [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
@@ -59,6 +72,10 @@ digraph ER {
   estadio:pk -> etiqueta:es  [label="1 : N", dir=both, arrowtail=teeodot, arrowhead=crow];
   dispositivo:pk -> evaluador:disp [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
 
+  sesion:pk -> sesion_sensor:sid [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  sensor:pk -> sesion_sensor:sen [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+  dispositivo:pk -> sensor:disp  [label="1 : N", dir=both, arrowtail=teetee, arrowhead=crow];
+
   {rank=same; persona; dispositivo}
-  {rank=same; sesion; evaluador}
+  {rank=same; sesion; evaluador; sensor}
 }
